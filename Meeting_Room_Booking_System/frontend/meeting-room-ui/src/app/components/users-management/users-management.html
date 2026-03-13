@@ -1,0 +1,97 @@
+<div class="container py-5">
+  <div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-3">
+       <div class="mb-4">
+          <h1 class="display-5 fw-bold text-dark mb-2 d-flex align-items-center">
+            <i class="bi bi-people me-3 me-3 text-primary"></i>
+            User Management
+          </h1>
+          <p class="text-muted fs-5 mb-0">Enable or disable user access</p>
+        </div>
+      <button class="btn btn-light" type="button" (click)="loadUsers()" [disabled]="isLoading || isSaving">
+        <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+      </button>
+    </div>
+  </div>
+  @if (errorMessage) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMessage }}
+    </div>
+  }
+
+  @if (successMessage) {
+    <div class="alert alert-success" role="alert">
+      <i class="bi bi-check-circle-fill me-2"></i>{{ successMessage }}
+    </div>
+  }
+
+  @if (isLoading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-white" role="status"></div>
+      <p class="text-white mt-3">Loading users...</p>
+    </div>
+  } @else {
+    <div class="page-container">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (user of users; track user.id) {
+              <tr [class.inactive-user]="!user.isActive">
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <span class="badge" [class.text-bg-warning]="user.role === 'Admin'" [class.text-bg-secondary]="user.role !== 'Admin'">
+                    {{ user.role }}
+                  </span>
+                </td>
+                <td>
+                  <span class="badge" [class.text-bg-success]="user.isActive" [class.text-bg-danger]="!user.isActive">
+                    {{ user.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <button
+                    class="btn btn-sm"
+                    [class.btn-outline-danger]="user.isActive"
+                    [class.btn-outline-success]="!user.isActive"
+                    type="button"
+                    [disabled]="isSaving"
+                    (click)="onToggleUser(user)"
+                  >
+                    {{ user.isActive ? 'Deactivate' : 'Activate' }}
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  }
+</div>
+
+@if (showDeactivateModal && selectedUser) {
+  <div class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h5 class="mb-3">Deactivate User</h5>
+      <p class="mb-4">
+        Deactivating this user will block their login. Do you also want to delete their future room bookings to free up space?
+      </p>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button class="btn btn-outline-secondary" type="button" (click)="closeDeactivateModal()">Cancel</button>
+        <button class="btn btn-outline-danger" type="button" (click)="deactivateOnly()">Deactivate Only</button>
+        <button class="btn btn-danger" type="button" (click)="deactivateAndClearBookings()">Deactivate & Clear Bookings</button>
+      </div>
+    </div>
+  </div>
+}

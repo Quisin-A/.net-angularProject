@@ -1,0 +1,230 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Global Resets and Base Styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background-color: #f1f5f9; /* Soft Slate Background */
+  min-height: 100vh;
+  color: #1e293b; /* Deep Navy Text */
+}
+
+/* App Shell Layout */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-wrapper {
+  flex: 1;
+  padding: 2rem 0;
+}
+
+/* Navbar Styles */
+.top-nav {
+  background: #1e293b !important; /* Professional Dark Navy */
+  padding: 0.8rem 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.top-nav .navbar-brand {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.top-nav .nav-link {
+  color: #cbd5e1 !important; /* Muted Slate */
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  transition: all 0.2s ease;
+}
+
+.top-nav .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff !important;
+}
+
+.top-nav .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff !important;
+}
+
+/* Footer Styles */
+.footer-bar {
+  background: #f8fafc;
+  color: #64748b;
+  padding: 1.5rem 0;
+  border-top: 1px solid #e2e8f0;
+  margin-top: auto;
+}
+
+/* Card Styles */
+.card {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  background: #f8fafc;
+  color: #1e293b;
+  font-weight: 700;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Button Styles */
+.btn-primary {
+  background-color: #4f46e5;
+  border: none;
+  font-weight: 600;
+  padding: 0.7rem 1.5rem;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #4338ca;
+  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+}
+
+
+/* 1. RESTING: Clean outline */
+.btn-outline-light {
+  transition: 0.2s;
+  border-radius: 6px;
+}
+
+/* 2. HOVER: Color fill and slight lift */
+.btn-outline-light:hover {
+  background: white !important;
+  color: #1e293b !important;
+  transform: translateY(-2px);
+}
+
+/* 3. CLICK: Physical press down */
+.btn-outline-light:active {
+  transform: translateY(0);
+  opacity: 0.8;
+}
+
+
+/* Form Styles */
+.form-control, .form-select {
+  border-radius: 0.5rem;
+  border: 2px solid #e0e0e0;
+  /* border: 2px solid #db0101; */
+
+  padding: 0.75rem 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+/* Table Styles */
+.table {
+  background: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.table thead {
+  /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white; */
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.table thead th {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Alert Styles */
+.alert {
+  border-radius: 0.5rem;
+  border: none;
+}
+
+/* Container Improvements */
+.page-container {
+  background: white;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  padding: 2rem;
+}
+
+
+
+/* Matching Footer Styles */
+/* Navy Footer to match Top Nav */
+.footer-bar {
+  background: #1e293b !important; /* Exact match to your navbar */
+  padding: 1.5rem 0;
+  margin-top: auto;
+  border-top: 4px solid #4f46e5; /* Thin Indigo accent line for a pro touch */
+}
+
+.footer-bar .text-muted {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Version Tag for Dark Backgrounds */
+.version-tag-dark {
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+  color: #cbd5e1; /* Light Slate */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.4rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  backdrop-filter: blur(4px); /* Modern "glass" effect */
+}
+
+/* Light Indigo accent for the icon */
+.text-indigo-light {
+  color: #818cf8 !important;
+}
+
+/* Subtle top shadow to separate from white body */
+.shadow-top {
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .page-wrapper {
+    padding: 1rem 0;
+  }
+  
+  .card {
+    margin-bottom: 1rem;
+  }
+}

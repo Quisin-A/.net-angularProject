@@ -1,0 +1,183 @@
+<div class="container py-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <!-- <div>
+          <h1 class="display-5 fw-bold text-white mb-2">
+            <i class="bi bi-building me-3"></i>Meeting Rooms
+          </h1>
+          <p class="text-white-50 mb-0">Browse and book available meeting spaces</p>
+        </div> -->
+        <div class="mb-4">
+          <h1 class="display-5 fw-bold text-dark mb-2 d-flex align-items-center">
+            <i class="bi bi-building me-3 text-primary"></i>Meeting Rooms
+          </h1>
+          <p class="text-muted fs-5 mb-0">Browse and book available meeting spaces</p>
+        </div>
+        @if (isAdmin) {
+        <span class="badge text-bg-warning">Admin Room Manager</span>
+        }
+      </div>
+
+      @if (isAdmin) {
+      <div class="mt-3 mb-3">
+        <h5 class="fw-semibold mb-3">Quick Stats</h5>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="stats-card h-100">
+              <div class="stats-label">Total Rooms</div>
+              <div class="stats-value">{{ rooms.length }}</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="stats-card h-100">
+              <div class="stats-label">Total Bookings</div>
+              @if (isStatsLoading) {
+              <div class="stats-value">...</div>
+              } @else {
+              <div class="stats-value">{{ totalBookingsCount }}</div>
+              }
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="stats-card h-100">
+              <div class="stats-label">Most Booked Room</div>
+              @if (isStatsLoading) {
+              <div class="stats-value">...</div>
+              } @else {
+              <div class="stats-value">{{ mostBookedRoomName }}</div>
+              <div class="stats-subtext">{{ mostBookedRoomCount }} bookings</div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      }
+
+      <div class="mt-4">
+        <h5 class="fw-semibold mb-2">Search Rooms</h5>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search by room name, location, or capacity"
+          [(ngModel)]="searchTerm"
+        >
+      </div>
+    </div>
+  </div>
+
+  @if (successMessage) {
+  <div class="alert alert-success" role="alert">
+    <i class="bi bi-check-circle-fill me-2"></i>
+    {{ successMessage }}
+  </div>
+  }
+
+  @if (isAdmin) {
+  <div class="page-container mb-4">
+    <h4 class="mb-3">{{ editedRoomId === null ? 'Add New Room' : 'Edit Room' }}</h4>
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label for="roomName" class="form-label">Room Name</label>
+        <input id="roomName" type="text" class="form-control" [(ngModel)]="roomForm.name" placeholder="Enter room name">
+      </div>
+      <div class="col-md-3">
+        <label for="capacity" class="form-label">Capacity</label>
+        <input id="capacity" type="number" class="form-control" [(ngModel)]="roomForm.capacity" min="1"
+          placeholder="10">
+      </div>
+      <div class="col-md-5">
+        <label for="location" class="form-label">Location</label>
+        <input id="location" type="text" class="form-control" [(ngModel)]="roomForm.location"
+          placeholder="Floor / Wing">
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 mt-3">
+      <button class="btn btn-primary" (click)="saveRoom()" [disabled]="isSaving">
+        @if (isSaving) {
+        <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+        Saving...
+        } @else {
+        <i class="bi bi-floppy me-2"></i>
+        {{ editedRoomId === null ? 'Add Room' : 'Update Room' }}
+        }
+      </button>
+      @if (editedRoomId !== null) {
+      <button class="btn btn-outline-secondary" (click)="resetForm()">
+        Cancel Edit
+      </button>
+      }
+    </div>
+  </div>
+  }
+
+  @if (isLoading) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-white" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="text-white mt-3">Loading rooms...</p>
+  </div>
+  } @else if (errorMessage) {
+  <div class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    {{ errorMessage }}
+  </div>
+  <button class="btn btn-primary" (click)="loadRooms()">Retry</button>
+  } @else if (rooms.length === 0) {
+  <div class="alert alert-info" role="alert">
+    <i class="bi bi-info-circle me-2"></i>
+    No rooms available at the moment.
+  </div>
+  } @else if (filteredRooms.length === 0) {
+  <div class="alert alert-info" role="alert">
+    <i class="bi bi-search me-2"></i>
+    No rooms match your search.
+  </div>
+  } @else {
+  <h5 class="fw-semibold mb-3">Room Cards</h5>
+  <div class="row g-4">
+    @for (room of filteredRooms; track room.id) {
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-door-open me-2"></i>{{ room.name }}
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <div class="d-flex align-items-center mb-2">
+              <i class="bi bi-people-fill text-primary me-2"></i>
+              <span class="text-muted">Capacity:</span>
+              <span class="ms-2 fw-bold">{{ room.capacity }} people</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <i class="bi bi-geo-alt-fill text-primary me-2"></i>
+              <span class="text-muted">Location:</span>
+              <span class="ms-2 fw-bold">{{ room.location }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer bg-transparent border-0 pb-3">
+          <div class="d-grid gap-2">
+            <a [routerLink]="['/book-room', room.id]" class="btn btn-primary w-100">
+              <i class="bi bi-calendar-check me-2"></i>Book This Room
+            </a>
+            @if (isAdmin) {
+            <button class="btn btn-outline-primary" (click)="startEdit(room)">
+              <i class="bi bi-pencil-square me-2"></i>Edit
+            </button>
+            <button class="btn btn-outline-danger" (click)="deleteRoom(room.id)">
+              <i class="bi bi-trash me-2"></i>Delete
+            </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  }
+</div>

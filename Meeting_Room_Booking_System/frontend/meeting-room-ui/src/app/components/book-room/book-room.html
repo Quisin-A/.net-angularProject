@@ -1,0 +1,109 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+      <div class="page-container">
+        <div class="text-center mb-4">
+          <i class="bi bi-calendar-check text-primary" style="font-size: 3rem;"></i>
+          <h2 class="mt-3 mb-2">Book Meeting Room</h2>
+          <p class="text-muted">Select your preferred date and time</p>
+        </div>
+
+        @if (errorMessage) {
+          <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            {{ errorMessage }}
+          </div>
+        }
+
+        @if (successMessage) {
+          <div class="alert alert-success" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            {{ successMessage }}
+          </div>
+        }
+
+        <form (ngSubmit)="book()">
+          @if (isAdmin) {
+          <div class="mb-4">
+            <label for="bookingUser" class="form-label fw-bold">
+              <i class="bi bi-person-badge me-2 text-primary"></i>Book For User
+            </label>
+            <select
+              id="bookingUser"
+              class="form-select form-select-lg"
+              [(ngModel)]="selectedUserId"
+              name="bookingUser"
+              [disabled]="isLoadingUsers"
+              required
+            >
+              @if (isLoadingUsers) {
+              <option [ngValue]="null">Loading users...</option>
+              } @else {
+                @for (user of availableUsers; track user.id) {
+                <option [ngValue]="user.id">{{ user.name }} ({{ user.email }})</option>
+                }
+              }
+            </select>
+          </div>
+          }
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="startTime" class="form-label fw-bold">
+                <i class="bi bi-calendar-event me-2 text-primary"></i>Start Date & Time
+              </label>
+              <input 
+                type="datetime-local" 
+                class="form-control form-control-lg" 
+                id="startTime"
+                [(ngModel)]="startTime" 
+                [min]="minStartDateTime"
+                name="startTime"
+                required
+              >
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label for="endTime" class="form-label fw-bold">
+                <i class="bi bi-calendar-event me-2 text-primary"></i>End Date & Time
+              </label>
+              <input 
+                type="datetime-local" 
+                class="form-control form-control-lg" 
+                id="endTime"
+                [(ngModel)]="endTime"
+                [min]="minEndDateTime"
+                name="endTime"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="alert alert-info mb-4">
+            <i class="bi bi-info-circle me-2"></i>
+            <small>Please ensure your meeting duration is appropriate for the room capacity.</small>
+          </div>
+
+          <div class="d-grid gap-2">
+            <button 
+              type="submit" 
+              class="btn btn-primary btn-lg"
+              [disabled]="isSubmitting"
+            >
+              @if (isSubmitting) {
+                <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                Booking...
+              } @else {
+                <i class="bi bi-check-circle me-2"></i>
+                Confirm Booking
+              }
+            </button>
+            <a routerLink="/rooms" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left me-2"></i>Back to Rooms
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

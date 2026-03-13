@@ -1,0 +1,156 @@
+<div class="container py-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="mb-4">
+          <h1 class="display-5 fw-bold text-dark mb-2 d-flex align-items-center">
+            <i class="bi bi-calendar-check me-3 text-primary"></i>
+            {{ pageTitle }}
+          </h1>
+          <p class="text-muted fs-5 mb-0">{{ pageSubtitle }}</p>
+        </div>
+        <div class="d-flex flex-column gap-2 align-items-end">
+          <a routerLink="/rooms" class="btn btn-action-white shadow-sm">
+            <i class="bi bi-plus-circle me-2 text-primary"></i>New Booking
+          </a>
+
+          @if (pageTitle === 'All Bookings') {
+          <button class="btn btn-light" type="button" (click)="loadBookings()" [disabled]="isLoading || isCancelling">
+            <i class="bi bi-arrow-clockwise me-2"></i>Refresh
+          </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if (isAdmin) {
+  <div class="row mb-4">
+    <div class="col-md-8 mb-2 mb-md-0">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search bookings by room, location, user, or booking ID"
+        [(ngModel)]="searchTerm"
+      >
+    </div>
+    <div class="col-md-4">
+      <input
+        type="date"
+        class="form-control"
+        [(ngModel)]="searchDate"
+      >
+    </div>
+  </div>
+  }
+
+  @if (successMessage) {
+  <div class="alert alert-success shadow-sm border-0 d-flex align-items-center mb-4 animate__animated animate__fadeIn"
+    role="alert">
+    <i class="bi bi-check-circle-fill fs-5 me-3"></i>
+    <div>
+      <strong>Success!</strong> {{ successMessage }}
+    </div>
+  </div>
+  }
+  @if (errorMessage) {
+  <div class="alert alert-danger" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ errorMessage }}
+  </div>
+  }
+
+  @if (isLoading) {
+  <div class="text-center py-5">
+    <div class="spinner-border text-white" role="status"></div>
+    <p class="text-white mt-3">Loading bookings...</p>
+  </div>
+  }
+  @else if (bookings.length === 0) {
+  <div class="page-container text-center py-5">
+    <div class="py-4">
+      <i class="bi bi-calendar2-x text-light mb-3 d-block" style="font-size: 4rem; color: #dee2e6 !important;"></i>
+
+      <h3 class="fw-bold text-dark">No Bookings Found</h3>
+      <p class="text-muted mx-auto" style="max-width: 400px;">
+        It looks like you haven't made any reservations yet.
+        Select a room to get started with your first booking.
+      </p>
+
+      <a routerLink="/rooms" class="btn btn-primary px-4 py-2 mt-2 shadow-sm">
+        <i class="bi bi-plus-circle me-2"></i>Book a Room
+      </a>
+    </div>
+  </div>
+  }
+  @else if (filteredBookings.length === 0) {
+  <div class="page-container text-center py-5">
+    <div class="py-4">
+      <i class="bi bi-search text-muted mb-3 d-block" style="font-size: 3rem;"></i>
+      <h3 class="fw-bold text-dark">No Matching Bookings</h3>
+      <p class="text-muted mx-auto" style="max-width: 420px;">
+        Try a different search for room name, location, user, or booking ID.
+      </p>
+    </div>
+  </div>
+  }
+
+  @else {
+  <div class="page-container bg-white rounded shadow p-4">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Room Details</th>
+            <th>Date & Time</th>
+            <th>Duration</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (booking of filteredBookings; track booking.id) {
+          <tr>
+            <td><span class="badge bg-primary">{{ booking.id }}</span></td>
+
+            <td>
+              <strong>{{ booking.room?.name || 'Room ' + booking.roomId }}</strong>
+              <div class="small text-muted">{{ booking.room?.location }}</div>
+
+              @if (pageTitle === 'All Bookings') {
+              <div class="mt-1">
+                <span class="badge bg-info text-dark" style="font-size: 0.7rem;">
+                  <i class="bi bi-person-fill me-1"></i>By: {{ booking.user?.name || 'User ' + booking.userId }}
+                </span>
+                <span class="badge ms-1" style="font-size: 0.7rem;" [ngClass]="getBookingStatusClass(booking)">
+                  {{ getBookingStatus(booking) }}
+                </span>
+              </div>
+              }
+            </td>
+
+            <td>
+              <div><i class="bi bi-clock me-1 text-primary"></i>{{ formatDateTime(booking.startTime) }}</div>
+              <div class="small text-muted">to {{ formatDateTime(booking.endTime) }}</div>
+            </td>
+            <td>
+              <span class="badge bg-secondary">
+                {{ calculateDuration(booking.startTime, booking.endTime) }}
+              </span>
+            </td>
+            <td class="text-end">
+              @if (canCancelBooking(booking)) {
+              <button class="btn btn-sm btn-outline-danger" (click)="cancelBooking(booking)" [disabled]="isCancelling">
+                <i class="bi bi-x-circle me-1"></i> Cancel
+              </button>
+              } @else {
+              <span class="text-muted small italic">Read Only</span>
+              }
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  }
+</div>

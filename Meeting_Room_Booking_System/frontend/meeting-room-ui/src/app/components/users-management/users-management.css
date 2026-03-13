@@ -1,0 +1,61 @@
+.inactive-user {
+  opacity: 0.5;
+  filter: grayscale(100%);
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 1rem;
+}
+
+.modal-card {
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  width: min(560px, 100%);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+}
+
+.page-container {
+  background: white;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  padding: 2rem;
+}
+
+.table {
+  background: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.table thead {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.table thead th {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.alert {
+  border-radius: 0.5rem;
+  border: none;
+}
