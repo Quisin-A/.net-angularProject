@@ -16,12 +16,19 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("AllowAngular",
+//         policy => policy.WithOrigins("http://localhost:4200")
+//         .AllowAnyHeader()
+//         .AllowAnyMethod());
+// });
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAngular",
-        policy => policy.WithOrigins("http://localhost:4200")
-        .AllowAnyHeader()
-        .AllowAnyMethod());
+    options.AddPolicy("AllowAll",
+        policy => policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
 });
 
 // Add services to the container.
@@ -34,7 +41,8 @@ app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseMiddleware<RoleMiddleware>();
 //
 
-app.UseCors("AllowAngular");
+// app.UseCors("AllowAngular");
+app.UseCors("AllowAll");
 app.MapControllers();
 
 // Configure the HTTP request pipeline.
@@ -45,7 +53,7 @@ app.MapScalarApiReference();
     
 // }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 var summaries = new[]
 {
