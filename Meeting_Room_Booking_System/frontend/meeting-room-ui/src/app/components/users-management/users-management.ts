@@ -54,7 +54,7 @@ export class UsersManagement implements OnInit {
   }
 
   onToggleUser(user: User): void {
-    if (!this.isAdmin || this.isSaving) {
+    if (!this.isAdmin || this.isSaving || user.role === 'Admin') {
       return;
     }
 

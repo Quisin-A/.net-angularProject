@@ -61,13 +61,14 @@
                 <td class="text-end">
                   <button
                     class="btn btn-sm"
-                    [class.btn-outline-danger]="user.isActive"
-                    [class.btn-outline-success]="!user.isActive"
+                    [class.btn-outline-danger]="user.isActive && user.role !== 'Admin'"
+                    [class.btn-outline-success]="!user.isActive && user.role !== 'Admin'"
                     type="button"
-                    [disabled]="isSaving"
+                    [disabled]="isSaving || user.role === 'Admin'"
                     (click)="onToggleUser(user)"
+                    title="{{ user.role === 'Admin' ? 'Cannot change status for Admin users' : (user.isActive ? 'Deactivate user' : 'Activate user') }}"
                   >
-                    {{ user.isActive ? 'Deactivate' : 'Activate' }}
+                    {{ user.role === 'Admin' ? 'Unable' : (user.isActive ? 'Deactivate' : 'Activate') }}
                   </button>
                 </td>
               </tr>
