@@ -38,12 +38,12 @@ app.UseCors("AllowAngular");
 app.MapControllers();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+// if (app.Environment.IsDevelopment())
+// {
+app.MapOpenApi();
+app.MapScalarApiReference();
     
-}
+// }
 
 app.UseHttpsRedirection();
 
