@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using MeetingRoomBookingApi.Data;
 using MeetingRoomBookingApi.Middleware;
 using Scalar.AspNetCore;
-
+using Microsoft.AspNetCore.HttpOverrides;
 //
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 //
@@ -36,6 +36,16 @@ builder.Services.AddCors(options =>
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+//
+var forwardedHeadersOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+};
+forwardedHeadersOptions.KnownNetworks.Clear();
+forwardedHeadersOptions.KnownProxies.Clear();
+
+app.UseForwardedHeaders(forwardedHeadersOptions);
+//
 app.UseMiddleware<RequestLoggingMiddleware>();
 //
 app.UseMiddleware<RoleMiddleware>();
@@ -49,17 +59,17 @@ app.MapControllers();
 // if (app.Environment.IsDevelopment())
 // {
 app.MapOpenApi();
-// app.MapScalarApiReference();
-app.MapScalarApiReference(options =>
-{
-    options.WithServers(new[]
-    {
-        new Scalar.AspNetCore.ScalarServer
-        {
-            Url = "https://roombook-api2.onrender.com"
-        }
-    });
-});
+app.MapScalarApiReference();
+// app.MapScalarApiReference(options =>
+// {
+//     options.WithServers(new[]
+//     {
+//         new Scalar.AspNetCore.ScalarServer
+//         {
+//             Url = "https://roombook-api2.onrender.com"
+//         }
+//     });
+// });
     
 // }
 
