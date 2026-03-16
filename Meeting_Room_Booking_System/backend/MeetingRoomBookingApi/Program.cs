@@ -49,7 +49,17 @@ app.MapControllers();
 // if (app.Environment.IsDevelopment())
 // {
 app.MapOpenApi();
-app.MapScalarApiReference();
+// app.MapScalarApiReference();
+app.MapScalarApiReference(options =>
+{
+    options.WithServers(new[]
+    {
+        new Scalar.AspNetCore.ScalarServer
+        {
+            Url = "https://roombook-api2.onrender.com"
+        }
+    });
+});
     
 // }
 
