@@ -95,6 +95,14 @@ app.MapGet("/weatherforecast", () =>
 .WithName("GetWeatherForecast");
 app.MapGet("/", () => Results.Redirect("/scalar"));
 
+
+//
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
+//
 app.Run();
 
 record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
