@@ -3,6 +3,7 @@ using MeetingRoomBookingApi.Data;
 using MeetingRoomBookingApi.Middleware;
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.HttpOverrides;
+
 //
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 //
@@ -23,8 +24,19 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //         .AllowAnyHeader()
 //         .AllowAnyMethod());
 // });
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("AllowAngular",
+//         policy => policy.WithOrigins("http://localhost:4200")
+//         .AllowAnyHeader()
+//         .AllowAnyMethod());
+// });
 builder.Services.AddCors(options =>
 {
+    options.AddPolicy("AllowAll",
+        policy => policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
     options.AddPolicy("AllowAll",
         policy => policy.AllowAnyOrigin()
                         .AllowAnyHeader()
@@ -36,7 +48,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
-//
 var forwardedHeadersOptions = new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -45,7 +56,6 @@ forwardedHeadersOptions.KnownNetworks.Clear();
 forwardedHeadersOptions.KnownProxies.Clear();
 
 app.UseForwardedHeaders(forwardedHeadersOptions);
-//
 app.UseMiddleware<RequestLoggingMiddleware>();
 //
 app.UseMiddleware<RoleMiddleware>();
