@@ -33,14 +33,7 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-// builder.Services.AddOpenApi();
-builder.Services.AddOpenApi(options =>
-{
-    options.AddServer(new Microsoft.OpenApi.Models.OpenApiServer
-    {
-        Url = "https://roombook-api2.onrender.com"
-    });
-});
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 app.UseMiddleware<RequestLoggingMiddleware>();
