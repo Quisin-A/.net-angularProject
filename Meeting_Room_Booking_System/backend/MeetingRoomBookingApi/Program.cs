@@ -3,13 +3,18 @@ using MeetingRoomBookingApi.Data;
 using MeetingRoomBookingApi.Middleware;
 using Scalar.AspNetCore;
 
+//
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+//
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+// builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddCors(options =>
 {

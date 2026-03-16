@@ -175,14 +175,20 @@ export class Bookings implements OnInit {
 	}
 
 	formatDateTime(dateTime: string): string {
+		if (!dateTime) return '';
 		const date = new Date(dateTime);
-		return date.toLocaleString('en-US', {
+		// return date.toLocaleString('en-US', {
+		const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+		// return date.toLocaleString('en-IN', {
+		return localDate.toLocaleString('en-IN', {
+
 			year: 'numeric',
 			month: 'short',
 			day: 'numeric',
 			hour: '2-digit',
 			minute: '2-digit',
-			hour12: true
+			hour12: true,
+			// timeZone: 'UTC'
 		});
 	}
 

@@ -50,7 +50,9 @@ namespace MeetingRoomBookingApi.Controllers
                 return Unauthorized("You can only create bookings for yourself.");
             }
 
-            if (booking.StartTime < DateTime.Now)
+            // if (booking.StartTime < DateTime.Now)
+            if (booking.StartTime < DateTime.UtcNow)
+
             {
                 return BadRequest("Start time cannot be in the past.");
             }
@@ -62,16 +64,28 @@ namespace MeetingRoomBookingApi.Controllers
             }
 
             // 2. Double-Booking Prevention Logic
+            // var isOverlapping = _context.Bookings.Any(b =>
+            //     b.RoomId == booking.RoomId &&
+            //     b.StartTime < booking.EndTime &&
+            //     b.EndTime > booking.StartTime);
             var isOverlapping = _context.Bookings.Any(b =>
-                b.RoomId == booking.RoomId &&
-                b.StartTime < booking.EndTime &&
-                b.EndTime > booking.StartTime);
+            b.RoomId == booking.RoomId &&
+            !(booking.EndTime <= b.StartTime || booking.StartTime >= b.EndTime));
 
             if (isOverlapping)
             {
                 return BadRequest("The room is already booked for this time slot.");
             }
-
+//
+            // booking.StartTime = booking.StartTime.ToUniversalTime();
+            // booking.EndTime = booking.EndTime.ToUniversalTime();
+            booking.StartTime = booking.StartTime.ToUniversalTime();
+            booking.EndTime = booking.EndTime.ToUniversalTime();
+            // booking.StartTime = DateTime.SpecifyKind(booking.StartTime, DateTimeKind.Utc);
+            // booking.EndTime = DateTime.SpecifyKind(booking.EndTime, DateTimeKind.Utc)
+            // booking.StartTime = DateTime.SpecifyKind(booking.StartTime, DateTimeKind.Utc);
+            // booking.EndTime = DateTime.SpecifyKind(booking.EndTime, DateTimeKind.Utc);
+//
             _context.Bookings.Add(booking);
             _context.SaveChanges();
 

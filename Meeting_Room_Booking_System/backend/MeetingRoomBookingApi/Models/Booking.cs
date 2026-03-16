@@ -15,8 +15,13 @@ namespace MeetingRoomBookingApi.Models
         // ADD THIS LINE: This allows .Include(b => b.User) to work
         public User? User { get; set; }
 
-        public DateTime StartTime { get; set; }
+        // public DateTime StartTime { get; set; } = DateTime.UtcNow;
 
+        // public DateTime EndTime { get; set; } = DateTime.UtcNow;
+        // public DateTimeOffset StartTime { get; set; }
+        // public DateTimeOffset EndTime { get; set; }
+        public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        
     }
 }
