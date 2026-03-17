@@ -79,8 +79,10 @@ namespace MeetingRoomBookingApi.Controllers
 //
             // booking.StartTime = booking.StartTime.ToUniversalTime();
             // booking.EndTime = booking.EndTime.ToUniversalTime();
-            booking.StartTime = booking.StartTime.ToUniversalTime();
-            booking.EndTime = booking.EndTime.ToUniversalTime();
+            // booking.StartTime = booking.StartTime.ToUniversalTime();
+            // booking.EndTime = booking.EndTime.ToUniversalTime();
+            booking.StartTime = DateTime.SpecifyKind(booking.StartTime.ToUniversalTime(), DateTimeKind.Utc);
+            booking.EndTime = DateTime.SpecifyKind(booking.EndTime.ToUniversalTime(), DateTimeKind.Utc);
             // booking.StartTime = DateTime.SpecifyKind(booking.StartTime, DateTimeKind.Utc);
             // booking.EndTime = DateTime.SpecifyKind(booking.EndTime, DateTimeKind.Utc)
             // booking.StartTime = DateTime.SpecifyKind(booking.StartTime, DateTimeKind.Utc);
