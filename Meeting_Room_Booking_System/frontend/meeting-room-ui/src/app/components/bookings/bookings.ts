@@ -174,23 +174,41 @@ export class Bookings implements OnInit {
 			: 'View and manage your room reservations';
 	}
 
-	formatDateTime(dateTime: string): string {
-		if (!dateTime) return '';
-		const date = new Date(dateTime);
-		// return date.toLocaleString('en-US', {
-		const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-		// return date.toLocaleString('en-IN', {
-		return localDate.toLocaleString('en-IN', {
+	// formatDateTime(dateTime: string): string {
+	// 	if (!dateTime) return '';
+	// 	const date = new Date(dateTime);
+	// 	// return date.toLocaleString('en-US', {
+	// 	const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+	// 	// return date.toLocaleString('en-IN', {
+	// 	return localDate.toLocaleString('en-IN', {
 
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit',
-			hour12: true,
-			// timeZone: 'UTC'
-		});
-	}
+	// 		year: 'numeric',
+	// 		month: 'short',
+	// 		day: 'numeric',
+	// 		hour: '2-digit',
+	// 		minute: '2-digit',
+	// 		hour12: true,
+	// 		// timeZone: 'UTC'
+	// 	});
+	// }
+  formatDateTime(dateTime: string): string {
+    if (!dateTime) return '';
+
+    // 1. Convert the ISO string to a JavaScript Date object.
+    // The browser automatically converts UTC to your Local Time (IST).
+    const date = new Date(dateTime);
+
+    // 2. Format for display using Indian English standards.
+    return date.toLocaleString('en-IN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+        // Do NOT use timeZone: 'UTC' here; we want Local Time!
+    });
+}
 
 	calculateDuration(startTime: string, endTime: string): string {
 		const start = new Date(startTime);
