@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MeetingRoomBookingApi.Data;
 using MeetingRoomBookingApi.Models;
+using MeetingRoomBookingApi.DTOs;
 using System.Linq;
 
 namespace MeetingRoomBookingApi.Controllers
@@ -59,6 +60,43 @@ namespace MeetingRoomBookingApi.Controllers
                 {
                     _context.Bookings.RemoveRange(futureBookings);
                 }
+            }
+
+            _context.SaveChanges();
+
+            return Ok(new
+            {
+                user.Id,
+                user.Name,
+                user.Email,
+                user.Role,
+                user.IsActive
+            });
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateUser(int id, [FromBody] UpdateUserDto dto)
+        {
+            var role = HttpContext.Items["UserRole"]?.ToString();
+
+            if (role != "Admin")
+                return Unauthorized();
+
+            var user = _context.Users.Find(id);
+
+            if (user == null)
+                return NotFound();
+
+            if (!string.IsNullOrWhiteSpace(dto.Name))
+                user.Name = dto.Name;
+
+            if (!string.IsNullOrWhiteSpace(dto.Email))
+            {
+                // Check if email is already taken by another user
+                if (_context.Users.Any(u => u.Email == dto.Email && u.Id != id))
+                    return BadRequest("Email is already in use.");
+
+                user.Email = dto.Email;
             }
 
             _context.SaveChanges();

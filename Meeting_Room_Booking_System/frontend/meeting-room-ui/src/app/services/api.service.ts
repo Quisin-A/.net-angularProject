@@ -63,6 +63,11 @@ export interface User {
   isActive: boolean;
 }
 
+export interface UpdateUserDto {
+  name?: string;
+  email?: string;
+}
+
 export interface CreateBookingRequest {
   roomId: number;
   userId: number;
@@ -74,7 +79,9 @@ export interface CreateBookingRequest {
   providedIn: 'root'
 })
 export class ApiService {
-  private readonly baseUrl = 'http://localhost:5260/api';
+  // private readonly baseUrl = 'http://localhost:5260/api';
+  private readonly baseUrl = 'https://roombook-api2.onrender.com/api';
+
 
   constructor(private readonly http: HttpClient) {}
 
@@ -128,5 +135,9 @@ export class ApiService {
 
   toggleUserStatus(id: number, clearFutureBookings: boolean): Observable<User> {
     return this.http.put<User>(`${this.baseUrl}/users/disabled/${id}?clearFutureBookings=${clearFutureBookings}`, {});
+  }
+
+  updateUser(id: number, dto: UpdateUserDto): Observable<User> {
+    return this.http.put<User>(`${this.baseUrl}/users/${id}`, dto);
   }
 }
