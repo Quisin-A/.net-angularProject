@@ -5,7 +5,7 @@ using Scalar.AspNetCore;
 using Microsoft.AspNetCore.HttpOverrides;
 
 //
-AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+// AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 //
 
 var builder = WebApplication.CreateBuilder(args);
