@@ -14,9 +14,21 @@ builder.Services.AddControllers();
 
 // builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//
+// builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+//
+
+// ✅ only this part changed
+var connectionString =
+    Environment.GetEnvironmentVariable("DATABASE_URL") ??
+    builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
+//
 // builder.Services.AddCors(options =>
 // {
 //     options.AddPolicy("AllowAngular",
