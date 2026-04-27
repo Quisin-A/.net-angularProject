@@ -63,11 +63,6 @@ export interface User {
   isActive: boolean;
 }
 
-export interface UpdateUserDto {
-  name?: string;
-  email?: string;
-}
-
 export interface CreateBookingRequest {
   roomId: number;
   userId: number;
@@ -135,9 +130,5 @@ export class ApiService {
 
   toggleUserStatus(id: number, clearFutureBookings: boolean): Observable<User> {
     return this.http.put<User>(`${this.baseUrl}/users/disabled/${id}?clearFutureBookings=${clearFutureBookings}`, {});
-  }
-
-  updateUser(id: number, dto: UpdateUserDto): Observable<User> {
-    return this.http.put<User>(`${this.baseUrl}/users/${id}`, dto);
   }
 }

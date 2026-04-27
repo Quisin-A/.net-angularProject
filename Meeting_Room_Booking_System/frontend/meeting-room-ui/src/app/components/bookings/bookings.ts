@@ -25,7 +25,7 @@ export class Bookings implements OnInit {
 		private readonly api: ApiService,
 		private readonly auth: AuthService,
 		private readonly cd: ChangeDetectorRef
-	) {}
+	) { }
 
 	ngOnInit(): void {
 		this.loadBookings();
@@ -146,10 +146,10 @@ export class Bookings implements OnInit {
 					? `Booking for ${roomName} (${employeeName}) has been cancelled.`
 					: `Your booking for ${roomName} has been cancelled.`;
 				this.cd.detectChanges();
-				
+
 				setTimeout(() => {
 					this.bookings = this.bookings.filter((x) => x.id !== booking.id);
-            		this.successMessage = '';
+					this.successMessage = '';
 					this.isCancelling = false;
 					this.cd.detectChanges();
 				}, 2000);
@@ -177,18 +177,13 @@ export class Bookings implements OnInit {
 	formatDateTime(dateTime: string): string {
 		if (!dateTime) return '';
 		const date = new Date(dateTime);
-		// return date.toLocaleString('en-US', {
-		const localDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-		// return date.toLocaleString('en-IN', {
-		return localDate.toLocaleString('en-IN', {
-
+		return date.toLocaleString('en-IN', {
 			year: 'numeric',
 			month: 'short',
 			day: 'numeric',
 			hour: '2-digit',
 			minute: '2-digit',
-			hour12: true,
-			// timeZone: 'UTC'
+			hour12: true
 		});
 	}
 
@@ -198,7 +193,7 @@ export class Bookings implements OnInit {
 		const diffMs = end.getTime() - start.getTime();
 		const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
 		const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-		
+
 		if (diffHours > 0) {
 			return `${diffHours}h ${diffMinutes}m`;
 		}

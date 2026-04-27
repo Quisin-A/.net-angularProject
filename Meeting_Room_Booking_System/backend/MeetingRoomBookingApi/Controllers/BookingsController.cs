@@ -77,14 +77,8 @@ namespace MeetingRoomBookingApi.Controllers
                 return BadRequest("The room is already booked for this time slot.");
             }
 //
-            // booking.StartTime = booking.StartTime.ToUniversalTime();
-            // booking.EndTime = booking.EndTime.ToUniversalTime();
             booking.StartTime = booking.StartTime.ToUniversalTime();
             booking.EndTime = booking.EndTime.ToUniversalTime();
-            // booking.StartTime = DateTime.SpecifyKind(booking.StartTime, DateTimeKind.Utc);
-            // booking.EndTime = DateTime.SpecifyKind(booking.EndTime, DateTimeKind.Utc)
-            // booking.StartTime = DateTime.SpecifyKind(booking.StartTime, DateTimeKind.Utc);
-            // booking.EndTime = DateTime.SpecifyKind(booking.EndTime, DateTimeKind.Utc);
 //
             _context.Bookings.Add(booking);
             _context.SaveChanges();

@@ -1,13 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ApiService, User, UpdateUserDto } from '../../services/api.service';
+import { ApiService, User } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-users-management',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
   templateUrl: './users-management.html',
   styleUrl: './users-management.css'
 })
@@ -20,9 +19,6 @@ export class UsersManagement implements OnInit {
 
   selectedUser: User | null = null;
   showDeactivateModal = false;
-
-  showEditModal = false;
-  editUser: UpdateUserDto = { name: '', email: '' };
 
   constructor(
     private readonly api: ApiService,
@@ -96,53 +92,6 @@ export class UsersManagement implements OnInit {
   closeDeactivateModal(): void {
     this.showDeactivateModal = false;
     this.selectedUser = null;
-    this.cd.detectChanges();
-  }
-
-  onEditUser(user: User): void {
-    if (!this.isAdmin || this.isSaving || user.role === 'Admin') {
-      return;
-    }
-
-    this.selectedUser = user;
-    this.editUser = { name: user.name, email: user.email };
-    this.showEditModal = true;
-    this.cd.detectChanges();
-  }
-
-  saveEdit(): void {
-    if (!this.selectedUser) {
-      return;
-    }
-
-    this.isSaving = true;
-    this.errorMessage = '';
-    this.successMessage = '';
-
-    this.api.updateUser(this.selectedUser.id, this.editUser).subscribe({
-      next: (updatedUser) => {
-        this.users = this.users.map((x) => (x.id === updatedUser.id ? updatedUser : x));
-        this.successMessage = `${updatedUser.name} has been updated.`;
-        this.isSaving = false;
-        this.closeEditModal();
-        setTimeout(() => {
-          this.successMessage = '';
-          this.cd.detectChanges();
-        }, 2000);
-        this.cd.detectChanges();
-      },
-      error: (err: { error?: string }) => {
-        this.errorMessage = typeof err.error === 'string' ? err.error : 'Unable to update user.';
-        this.isSaving = false;
-        this.cd.detectChanges();
-      }
-    });
-  }
-
-  closeEditModal(): void {
-    this.showEditModal = false;
-    this.selectedUser = null;
-    this.editUser = { name: '', email: '' };
     this.cd.detectChanges();
   }
 
